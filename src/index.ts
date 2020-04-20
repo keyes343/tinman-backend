@@ -2,7 +2,7 @@ import { CookieSession } from './cookieSession'; // not from the node module, bu
 import express, {Application} from 'express';
 import cors from 'cors';
 import router from './router';
-import passport from 'passport';
+import { passport } from './passport';
 
 
 class App {

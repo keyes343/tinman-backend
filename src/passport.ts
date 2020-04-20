@@ -23,8 +23,7 @@ export class Passport {
             clientSecret: client_Secret,
             callbackURL: '/auth/google/redirect'
             },
-            (accessToken:any, refreshToken:any, profile:any, done:any)=>this.callBackForGoogleStrategy(accessToken, refreshToken, profile, done)
-        )
+            (accessToken:any, refreshToken:any, profile:any, done:any)=>this.callBackForGoogleStrategy(accessToken, refreshToken, profile, done))
         passport.use(this.GoogleStrategy);
         passport.serializeUser((user:any,done:any)=> this.serializeUser(user,done));
         passport.deserializeUser((id:string,done:any) => this.deserialize(id,done));
@@ -42,7 +41,7 @@ export class Passport {
     // passport callback function
     public callBackForGoogleStrategy = async(accessToken:any, refreshToken:any, profile:any, done:any):Promise<any> => {
         // User here is one of the mongoose schemas
-        const User:any = this.db.User;
+        const User:any = this.User;
         try{
             //
             const currentUser = await User.findOne({

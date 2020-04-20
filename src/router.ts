@@ -2,8 +2,8 @@ import express, { Router, Request, Response, NextFunction } from 'express';
 import app from './index';
 import { passport } from './passport'; // "./" is needed as passport is being called from a ts file, not the npm module.
 import { checkAuth } from './extraMiddlewares';
-import addUser from './users/addUser';
-import { db, User, UserObj } from './mongoose'
+import { addUser } from './models';
+// import { db, User, UserObj } from './mongoose'
 
 class ExpressRouter{
     // private pokeService: PokeService;
@@ -38,28 +38,8 @@ class ExpressRouter{
             req.logout();
             res.redirect('/');
         })
-        this.router.post('/addUser', async (req:Request, res:Response) => {
-            const body = req.body;
-            const new_user:UserObj = {
-                name: body.name,
-                age: body.age,
-            }
-            const add_user = User(new_user);
-            
-            try {
-                await add_user.save((err:any) => {
-                    if (err) return res.status(500).send(err);
-                });
-            } catch (error) {
-                console.log(error);
-            } finally {
-                //
-            }
-            const obj = {
-                user_info: add_user,
-                done: 'yes'
-            }
-            res.status(200).send(obj);
+        this.router.post('/addUser', (req:Request, res:Response) => {
+            this.addUser ( req, res )
         })
     }
 }

@@ -1,42 +1,40 @@
 import mongoose, {Schema, model, Model} from 'mongoose';
-
-export type UserObj = {
-    name: string;
-    age: number;
-    googleid?: string;
-}
+import { User_type, Menu_type, userSchema, menuSchema } from './models'; // type+schema
 
 class MongooseDatabase {
     public db: any;
-    public SchemaUser: Schema<UserObj>;
-    public User: any;
+    public SchemaUser: Schema<User_type>; 
+    public SchemaMenu: Schema<Menu_type>;
+    public User: any; public Menu: any;
 
     constructor(){
         this.db = mongoose;
-        this.SchemaUser = new Schema<UserObj> ({
-            name:{ type:String, required:true },
-            age: { type:Number, required:false },
-            googleid: { type:Number, required:false }
-        });
-        
+        this.SchemaUser = userSchema;
+        this.SchemaMenu = menuSchema;
         this.initializeMongoose();
-        this.func_2();
     }
     public initializeMongoose = async() => {
-        const uri = 'mongodb+srv://jeet343:jeet343@tinman-pldvk.mongodb.net/auth?retryWrites=true&w=majority';
-        
+        const uri_auth = 'mongodb+srv://jeet343:jeet343@tinman-pldvk.mongodb.net/auth?retryWrites=true&w=majority';
+        const uri_food = 'mongodb+srv://jeet343:jeet343@tinman-pldvk.mongodb.net/food?retryWrites=true&w=majority';
         try {
-            await this.db.connect(uri, {useNewUrlParser:true, useUnifiedTopology: true});
-            await this.db.connection.once('open',this.func_2)
+            const auth = await this.db.connect(uri_auth, {useNewUrlParser:true, useUnifiedTopology: true});
+            this.User = auth.model('user',this.SchemaUser);
+
+            const food = await this.db.connect(uri_food, {useNewUrlParser:true, useUnifiedTopology: true});
+            this.Menu = food.model('menu',this.SchemaMenu)
+
+            this.db.connection.once('open',this.func_2)
+
         } catch (error) {
             console.log(error)
         }
     }
     private func_2() {
-        this.User = model('user',this.SchemaUser);
+        //this.User = model('user',this.SchemaUser);
     }
 }
 
 const mongooseInstance = new MongooseDatabase();
 export const db = mongooseInstance.db;
 export const User = mongooseInstance.User;
+export const Menu = mongooseInstance.Menu;
