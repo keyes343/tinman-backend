@@ -1,8 +1,10 @@
 import { CookieSession } from './cookieSession'; // not from the node module, but from another ts file
 import express, {Application} from 'express';
 import cors from 'cors';
-import router from './router';
-import { passport } from './passport';
+import { router } from './router';
+// import { passport } from './passport';
+
+import { User } from './router';
 
 
 class App {
@@ -19,9 +21,9 @@ class App {
         this.app.use(express.urlencoded({ limit: '50mb', extended:true}))
         this.app.use(cors());
         this.app.use('/', router);
-        this.app.use(new CookieSession().cookie);
-        this.app.use(passport.initialize());
-        this.app.use(passport.session());
+        // this.app.use(new CookieSession().cookie);
+        // this.app.use(passport.initialize());
+        // this.app.use(passport.session());
     }
 }
 

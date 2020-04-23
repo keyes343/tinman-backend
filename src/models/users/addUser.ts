@@ -1,30 +1,34 @@
 import { Request, Response, NextFunction } from 'express';
-import { db, User } from '../incoming';
-import { UserObj } from './types'
+import { User } from '../incoming';
+import { User_type } from './types'
 
-const addUser = async (req:Request, res:Response, next:NextFunction) => {
-    const body = req.body;
-    const new_user:UserObj = {
-        googleName: body.name,
-        googleID: body.googleID,
-        age: body.age,
-    };
-    let return_user:UserObj = {
-        googleName: 'not_initialized',
-        age: 0
-    };
-
-    const add_user = new User(new_user);
-    
+const addUser = async(req:Request, res:Response ) => {
+    // const c = { test:'test doneeee'};
+    // return c;
     try {
-        const user = await add_user.save();
-        return_user.username = user.name;
-        return_user.age = user.age;
-
+        await User.create({
+            googleName: 'weeeee',
+            age:200
+        }, (err:any,doc:any)=>{
+            if(err){
+                res.send({erroris:err});
+                return;
+            }else {
+                res.send({
+                    userdoc:doc,
+                    status:'success weeeee'
+                });
+                return;
+            }
+        });
+        // const user = await add_user.save();
     } catch (error) {
-        console.log(error);
+        res.send({error})
     } 
-    res.status(200).send(return_user);
+    const c = { test:'triggered from addUser.ts'}
+    return c
+    // res.status(200).send({
+    // });
     
 }
 

@@ -1,4 +1,4 @@
-export type User_type = {
+export interface User_type {
     age?: number;
     googleID?: string;
     googleName?: string;
